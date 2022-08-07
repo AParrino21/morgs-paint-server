@@ -18,7 +18,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 
 var whitelist = [
   'http://localhost:3000',
-  'http://localhost:3001',
+  'http://localhost:3002',
 ];
 
 var corsOptions = {
