@@ -19,6 +19,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(
 var whitelist = [
   'http://localhost:3000',
   'http://localhost:3002',
+  'https://www.morgandanton.com'
 ];
 
 var corsOptions = {
