@@ -1,10 +1,11 @@
 const express = require('express');
 const routes = require('./routes');
-const stripe = require('stripe')('sk_test_51LEnEdElbRpz7PMDLGNiydmgUq3Qr9qZieFKx9e8Mb6ad7kJaopvsLRonfdWA1ipFNZrVNPKv4CVJwFEx2Cj3isR00Bc1StOv0');
+const stripe = require('stripe')(process.env.API_KEY_STRIPE);
 const mongoose = require('mongoose')
 const cors = require('cors');
 
-const YOUR_DOMAIN = 'http://localhost:3000';
+// const YOUR_DOMAIN = 'http://localhost:3000';
+const YOUR_DOMAIN = 'https://www.morgandanton.com';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -43,7 +44,7 @@ app.post('/create-checkout-session', async (req, res) => {
   let items = []
   for (let i = 0; i < req.body.length; i++) {
     let obj = {
-      price: req.body[i].price,
+      price: req.body[i].price_id,
       quantity: 1,
     }
 
