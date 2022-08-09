@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(routes);
 
 // stripe checkout
-app.post(process.env.URL + '/create-checkout-session', async (req, res) => {
+app.post('/create-checkout-session', async (req, res) => {
 
   let items = []
   for (let i = 0; i < req.body.length; i++) {
