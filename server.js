@@ -5,6 +5,7 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 
 const YOUR_DOMAIN = 'https://www.morgandanton.com/thanks';
+const YOUR_DOMAIN_C = 'https://www.morgandanton.com/';
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -61,7 +62,7 @@ app.post('/create-checkout-session', async (req, res) => {
     // ],
     mode: 'payment',
     success_url: `${YOUR_DOMAIN}?success=true`,
-    cancel_url: `${YOUR_DOMAIN}?canceled=true`,
+    cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
     automatic_tax: { enabled: true },
   });
 
