@@ -45,8 +45,7 @@ app.post('/create-checkout-session', async (req, res) => {
   for (let i = 0; i < req.body.length; i++) {
     let obj = {
       price: req.body[i].price_id,
-      quantity: 1,
-      currency: 'usd'
+      quantity: 1
     }
 
     items.push(obj)
