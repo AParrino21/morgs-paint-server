@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 const cors = require('cors');
 
 // const YOUR_DOMAIN = 'http://localhost:3000';
-const YOUR_DOMAIN = 'https://www.morgandanton.com';
+const YOUR_DOMAIN = 'https://www.morgandanton.com/thanks';
 
 const PORT = process.env.PORT || 3001;
 const app = express();

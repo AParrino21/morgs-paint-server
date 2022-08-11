@@ -10,6 +10,7 @@ const printsSchema = new Schema({
 
     src: [
         {
+            image_id: Number,
             image: String,
             inventory: Number,
         }
@@ -25,7 +26,11 @@ const printsSchema = new Schema({
         required: true
     },
 
-    priceData: {
+    price_id: {
+        type: String
+    },
+    
+    cat: {
         type: String
     }
 

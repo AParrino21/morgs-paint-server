@@ -33,7 +33,11 @@ const mixedMediaSchema = new Schema({
         required: true
     },
 
-    priceData: {
+    price_id: {
+        type: String
+    },
+    
+    cat: {
         type: String
     }
 

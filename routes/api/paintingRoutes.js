@@ -55,4 +55,34 @@ router.get('/mixedmedia/:id', (req, res) => {
     });
 })
 
+router.put('/subtract', async (req, res) => {
+  let data = req.body
+  if (data.cat === 'painting') {
+    db.Paintings.findByIdAndUpdate({ _id: data._id }, { inventory: data.inventory - 1 })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => {
+        console.log(err)
+        res.status(422).json(err)
+      });
+  }
+
+  if(data.cat === 'mixed_media') {
+    db.MixedMedia.findByIdAndUpdate({ _id: data._id }, { inventory: data.inventory - 1 })
+    .then(dbModel => res.json(dbModel))
+    .catch(err => {
+      console.log(err)
+      res.status(422).json(err)
+    });
+  }
+
+  if(data.cat === 'prints') {
+    db.Prints.updateOne({_id: data.objId, src: {$elemMatch: {image_id: data.image_id}}} , {$set: {"src.$.inventory": data.srcUpdate[0].inventory}})
+    .then(dbModel => res.json(dbModel))
+    .catch(err => {
+      console.log(err)
+      res.status(422).json(err)
+    });
+  }
+})
+
 module.exports = router;
