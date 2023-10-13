@@ -1,5 +1,19 @@
 const router = require("express").Router();
 const db = require("../../models");
+const { default: axios } = require('axios')
+
+const API = process.env.MORGS_API_URL
+const S = process.env.MORGS_S_URL
+
+router.get('/getCakeGirls', (req, res) => {
+  try {
+    axios.get(`${API}cakeGirls`).then(response => {
+      res.json(response?.data)
+    })
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 router.get('/oils', (req, res) => {
   db.Paintings.find({})
