@@ -8,7 +8,7 @@ const S = process.env.MORGS_S_URL
 router.get('/getCakeGirls', (req, res) => {
   try {
     axios.get(`${API}cakeGirls`).then(response => {
-      res.json(response)
+      return res.json(response)
     })
   } catch (error) {
     console.log(error);
