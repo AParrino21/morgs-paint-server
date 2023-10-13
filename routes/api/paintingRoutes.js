@@ -1,21 +1,12 @@
 const router = require("express").Router();
 const db = require("../../models");
-// const { default: axios } = require('axios')
+require('dotenv').config();
 
 const API = process.env.MORGS_API_URL
 const S = process.env.MORGS_S_URL
 
-// router.get('/getCakeGirls', (req, res) => {
-//   try {
-//     axios.get(`${API}cakeGirls`).then(response => {
-//       return res.json(response)
-//     })
-//   } catch (error) {
-//     console.log(error);
-//   }
-// })
-
 router.get('/getCakeGirls', (req, res) => {
+  console.log("hit")
   fetch(`${API}cakeGirls`, {
     method: 'GET',
     headers: {
