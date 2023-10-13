@@ -1,18 +1,31 @@
 const router = require("express").Router();
 const db = require("../../models");
-const { default: axios } = require('axios')
+// const { default: axios } = require('axios')
 
 const API = process.env.MORGS_API_URL
 const S = process.env.MORGS_S_URL
 
+// router.get('/getCakeGirls', (req, res) => {
+//   try {
+//     axios.get(`${API}cakeGirls`).then(response => {
+//       return res.json(response)
+//     })
+//   } catch (error) {
+//     console.log(error);
+//   }
+// })
+
 router.get('/getCakeGirls', (req, res) => {
-  try {
-    axios.get(`${API}cakeGirls`).then(response => {
-      return res.json(response)
-    })
-  } catch (error) {
-    console.log(error);
-  }
+  fetch(`${API}cakeGirls`, {
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+  }).then(response => {
+    return response.json()
+  }).then(data => {
+    return res.json(data)
+  })
 })
 
 router.get('/oils', (req, res) => {
