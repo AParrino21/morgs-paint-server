@@ -31,6 +31,19 @@ router.get('/getHeader', (req, res) => {
   })
 })
 
+router.get('/getContactPic', (req, res) => {
+  fetch(`${API}contactPic`, {
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+  }).then(response => {
+    return response.json()
+  }).then(data => {
+    return res.json(data)
+  })
+})
+
 router.get('/oils', (req, res) => {
   db.Paintings.find({})
     .then(dbModel => res.json(dbModel))
