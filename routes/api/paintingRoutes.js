@@ -6,8 +6,20 @@ const API = process.env.MORGS_API_URL
 const S = process.env.MORGS_S_URL
 
 router.get('/getCakeGirls', (req, res) => {
-  console.log("hit")
   fetch(`${API}cakeGirls`, {
+    method: 'GET',
+    headers: {
+    'Content-Type': 'application/json',
+    },
+  }).then(response => {
+    return response.json()
+  }).then(data => {
+    return res.json(data)
+  })
+})
+
+router.get('/getHeader', (req, res) => {
+  fetch(`${API}headers`, {
     method: 'GET',
     headers: {
     'Content-Type': 'application/json',
