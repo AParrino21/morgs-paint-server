@@ -18,18 +18,18 @@ router.get('/getCakeGirls', (req, res) => {
   })
 })
 
-router.get('/getHeader', (req, res) => {
-  fetch(`${API}headers`, {
-    method: 'GET',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-  }).then(response => {
-    return response.json()
-  }).then(data => {
-    return res.json(data)
-  })
-})
+// router.get('/getHeader', (req, res) => {
+//   fetch(`${API}headers`, {
+//     method: 'GET',
+//     headers: {
+//     'Content-Type': 'application/json',
+//     },
+//   }).then(response => {
+//     return response.json()
+//   }).then(data => {
+//     return res.json(data)
+//   })
+// })
 
 router.get('/oils', (req, res) => {
   db.Paintings.find({})
