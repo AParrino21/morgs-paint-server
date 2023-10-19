@@ -127,7 +127,6 @@ router.put("/subtract", async (req, res) => {
       { inventory: data.inventory - 1 }
     )
       .then((dbModel) => res.json(dbModel))
-      .then(data => res.json(data))
       .catch((err) => {
         console.log(err);
         res.status(422).json(err);
@@ -140,7 +139,6 @@ router.put("/subtract", async (req, res) => {
       { inventory: data.inventory - 1 }
     )
       .then((dbModel) => res.json(dbModel))
-      .then(data => res.json(data))
       .catch((err) => {
         console.log(err);
         res.status(422).json(err);
