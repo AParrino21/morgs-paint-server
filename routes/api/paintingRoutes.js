@@ -78,6 +78,7 @@ router.post("/wedding", (req, res) => {
       try {
         const response = await fetch(
           "https://morgspaintserver.herokuapp.com/api/paintings/create-checkout-session",
+          // "http://localhost:3001/api/paintings/create-checkout-session",
           {
             method: "POST",
             headers: {
@@ -91,6 +92,7 @@ router.post("/wedding", (req, res) => {
 
         if (response.ok) {
           res.json(data);
+          console.log('wedding', data)
         } else {
           res.status(response.status).json(data);
         }
@@ -214,17 +216,17 @@ router.put("/subtract", async (req, res) => {
   }
 });
 
-router.post("/create-checkout-session", async (req, res) => {
+router.post("/create-checkout-session", (req, res) => {
   const { price_id } = req.body;
   if (!price_id) {
     return res.status(400).json({ error: "Price ID is required" });
   }
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const session = stripe.checkout.sessions.create({
       line_items: [
         {
-          price: price_id,
+          price: price_id[0].price_id,
           quantity: 1,
         },
       ],
@@ -235,6 +237,7 @@ router.post("/create-checkout-session", async (req, res) => {
     });
 
     res.json({ url: session.url });
+    console.log('stripe', { url: session.url })
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Failed to create checkout session" });
