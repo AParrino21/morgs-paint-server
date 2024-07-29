@@ -5,6 +5,8 @@ const stripe = require("stripe")(process.env.API_KEY_STRIPE);
 
 const API = process.env.MORGS_API_URL;
 const S = process.env.MORGS_S_URL;
+const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
+const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
 
 router.get("/getCakeGirls", (req, res) => {
   fetch(`${API}cakeGirls`, {
@@ -68,8 +70,34 @@ router.get("/getGalleryHeader", (req, res) => {
 
 router.post("/wedding", (req, res) => {
   db.WeddingPortrait.find({})
-    .then((dbModel) => {
-      const priceId = {price_id: dbModel.filter((item) => item.price == req.body.price)}
+    .then(async (dbModel) => {
+      const priceId = {
+        price_id: dbModel.filter((item) => item.price == req.body.price),
+      };
+
+      try {
+        const response = await fetch(
+          "https://morgspaintserver.herokuapp.com/api/paintings/create-checkout-session",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(priceId),
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok) {
+          res.json(data);
+        } else {
+          res.status(response.status).json(data);
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to create checkout session" });
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -186,32 +214,31 @@ router.put("/subtract", async (req, res) => {
   }
 });
 
+router.post("/create-checkout-session", async (req, res) => {
+  const { price_id } = req.body;
+  if (!price_id) {
+    return res.status(400).json({ error: "Price ID is required" });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price: price_id,
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `${YOUR_DOMAIN}?success=true`,
+      cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
+      automatic_tax: { enabled: true },
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Failed to create checkout session" });
+  }
+});
+
 module.exports = router;
-
-
-// const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
-//       const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
-//       router.post("/create-checkout-session", async (req, res) => {
-//         console.log("hit");
-//         const session = await stripe.checkout.sessions.create({
-//           line_items: [
-//             {
-//               price: priceId[0].price_id,
-//               quantity: 1,
-//             },
-//           ],
-//           // [
-//           //   {
-//           //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-//           //     price: '{{PRICE_ID}}',
-//           //     quantity: 1,
-//           //   },
-//           // ],
-//           mode: "payment",
-//           success_url: `${YOUR_DOMAIN}?success=true`,
-//           cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
-//           automatic_tax: { enabled: true },
-//         });
-
-//         res.json({ url: session.url });
-//       });
