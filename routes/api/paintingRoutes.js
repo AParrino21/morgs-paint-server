@@ -77,8 +77,8 @@ router.post("/wedding", (req, res) => {
 
       try {
         const response = await fetch(
-          "https://morgspaintserver.herokuapp.com/api/paintings/create-checkout-session",
-          // "http://localhost:3001/api/paintings/create-checkout-session",
+          // "https://morgspaintserver.herokuapp.com/api/paintings/create-checkout-session",
+          "http://localhost:3001/api/paintings/create-checkout-session",
           {
             method: "POST",
             headers: {
@@ -92,7 +92,7 @@ router.post("/wedding", (req, res) => {
 
         if (response.ok) {
           res.json(data);
-          console.log('wedding', data)
+          console.log("wedding", data);
         } else {
           res.status(response.status).json(data);
         }
@@ -105,6 +105,33 @@ router.post("/wedding", (req, res) => {
       console.log(err);
       res.status(422).json(err);
     });
+});
+
+router.post('/create-checkout-session', async (req, res) => {
+  const { price_id } = req.body;
+  if (!price_id) {
+    return res.status(400).json({ error: 'Price ID is required' });
+  }
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price: price_id[0].price_id, 
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${YOUR_DOMAIN}?success=true`,
+      cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
+      automatic_tax: { enabled: true },
+    });
+
+    res.json({ url: session.url });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: 'Failed to create checkout session' });
+  }
 });
 
 router.get("/oils", (req, res) => {
@@ -213,34 +240,6 @@ router.put("/subtract", async (req, res) => {
       .then((data) => {
         return res.json(data);
       });
-  }
-});
-
-router.post("/create-checkout-session", (req, res) => {
-  const { price_id } = req.body;
-  if (!price_id) {
-    return res.status(400).json({ error: "Price ID is required" });
-  }
-
-  try {
-    const session = stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price: price_id[0].price_id,
-          quantity: 1,
-        },
-      ],
-      mode: "payment",
-      success_url: `${YOUR_DOMAIN}?success=true`,
-      cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
-      automatic_tax: { enabled: true },
-    });
-
-    res.json({ url: session.url });
-    console.log('stripe', { url: session.url })
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "Failed to create checkout session" });
   }
 });
 
