@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../../models");
 require("dotenv").config();
+const stripe = require("stripe")(process.env.API_KEY_STRIPE);
 
 const API = process.env.MORGS_API_URL;
 const S = process.env.MORGS_S_URL;
@@ -62,6 +63,43 @@ router.get("/getGalleryHeader", (req, res) => {
     })
     .then((data) => {
       return res.json(data);
+    });
+});
+
+router.post("/wedding", (req, res) => {
+  db.WeddingPortrait.find({})
+    .then((dbModel) => {
+      const priceId = dbModel.filter((item) => item.price == req.body.price);
+
+      const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
+      const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
+      router.post("/create-checkout-session", async (req, res) => {
+        const session = await stripe.checkout.sessions.create({
+          line_items: [
+            {
+              price: priceId[0].price_id,
+              quantity: 1,
+            },
+          ],
+          // [
+          //   {
+          //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+          //     price: '{{PRICE_ID}}',
+          //     quantity: 1,
+          //   },
+          // ],
+          mode: "payment",
+          success_url: `${YOUR_DOMAIN}?success=true`,
+          cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
+          automatic_tax: { enabled: true },
+        });
+
+        res.json({ url: session.url });
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(422).json(err);
     });
 });
 

@@ -1,29 +1,31 @@
-const express = require('express');
-const routes = require('./routes');
-const stripe = require('stripe')(process.env.API_KEY_STRIPE);
-const mongoose = require('mongoose')
-const cors = require('cors');
+const express = require("express");
+const routes = require("./routes");
+const stripe = require("stripe")(process.env.API_KEY_STRIPE);
+const mongoose = require("mongoose");
+const cors = require("cors");
 
-const YOUR_DOMAIN = 'https://www.morgandanton.com/thanks';
+const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
 // const YOUR_DOMAIN = 'https://dev-morgandanton.netlify.app/thanks';
 // const YOUR_DOMAIN = 'http://localhost:5173/thanks';
-const YOUR_DOMAIN_C = 'https://www.morgandanton.com/';
+const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
 
 const PORT = process.env.PORT || 3001;
 const app = express();
 
-require('dotenv').config();
+require("dotenv").config();
 
 const uri = process.env.DB;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then((e) => {
-  console.log("DB connected")
-})
+mongoose
+  .connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((e) => {
+    console.log("DB connected");
+  });
 
 var whitelist = [
-  'http://localhost:3000',
-  'http://localhost:3001',
-  'http://localhost:3002',
-  'http://localhost:5173'
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002",
+  "http://localhost:5173",
 ];
 
 var corsOptions = {
@@ -31,7 +33,7 @@ var corsOptions = {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
 };
@@ -43,16 +45,15 @@ app.use(express.json());
 app.use(routes);
 
 // stripe checkout
-app.post('/create-checkout-session', async (req, res) => {
-
-  let items = []
+app.post("/create-checkout-session", async (req, res) => {
+  let items = [];
   for (let i = 0; i < req.body.length; i++) {
     let obj = {
       price: req.body[i].price_id,
-      quantity: 1
-    }
+      quantity: 1,
+    };
 
-    items.push(obj)
+    items.push(obj);
   }
 
   const session = await stripe.checkout.sessions.create({
@@ -64,13 +65,13 @@ app.post('/create-checkout-session', async (req, res) => {
     //     quantity: 1,
     //   },
     // ],
-    mode: 'payment',
+    mode: "payment",
     success_url: `${YOUR_DOMAIN}?success=true`,
     cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
     automatic_tax: { enabled: true },
   });
 
-  res.json({ url: session.url })
+  res.json({ url: session.url });
 });
 // end stripe checkout
 
