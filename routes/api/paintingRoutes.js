@@ -69,33 +69,7 @@ router.get("/getGalleryHeader", (req, res) => {
 router.post("/wedding", (req, res) => {
   db.WeddingPortrait.find({})
     .then((dbModel) => {
-      const priceId = dbModel.filter((item) => item.price == req.body.price);
-
-      const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
-      const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
-      router.post("/create-checkout-session", async (req, res) => {
-        const session = await stripe.checkout.sessions.create({
-          line_items: [
-            {
-              price: priceId[0].price_id,
-              quantity: 1,
-            },
-          ],
-          // [
-          //   {
-          //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          //     price: '{{PRICE_ID}}',
-          //     quantity: 1,
-          //   },
-          // ],
-          mode: "payment",
-          success_url: `${YOUR_DOMAIN}?success=true`,
-          cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
-          automatic_tax: { enabled: true },
-        });
-
-        res.json({ url: session.url });
-      });
+      const priceId = {price_id: dbModel.filter((item) => item.price == req.body.price)}
     })
     .catch((err) => {
       console.log(err);
@@ -213,3 +187,31 @@ router.put("/subtract", async (req, res) => {
 });
 
 module.exports = router;
+
+
+// const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
+//       const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
+//       router.post("/create-checkout-session", async (req, res) => {
+//         console.log("hit");
+//         const session = await stripe.checkout.sessions.create({
+//           line_items: [
+//             {
+//               price: priceId[0].price_id,
+//               quantity: 1,
+//             },
+//           ],
+//           // [
+//           //   {
+//           //     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+//           //     price: '{{PRICE_ID}}',
+//           //     quantity: 1,
+//           //   },
+//           // ],
+//           mode: "payment",
+//           success_url: `${YOUR_DOMAIN}?success=true`,
+//           cancel_url: `${YOUR_DOMAIN_C}?canceled=true`,
+//           automatic_tax: { enabled: true },
+//         });
+
+//         res.json({ url: session.url });
+//       });
