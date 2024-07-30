@@ -5,7 +5,7 @@ const stripe = require("stripe")(process.env.API_KEY_STRIPE);
 
 const API = process.env.MORGS_API_URL;
 const S = process.env.MORGS_S_URL;
-const YOUR_DOMAIN = "https://www.morgandanton.com/thanks";
+const YOUR_DOMAIN = "https://www.morgandanton.com/thank-you-wedding";
 const YOUR_DOMAIN_C = "https://www.morgandanton.com/";
 
 router.get("/getCakeGirls", (req, res) => {
