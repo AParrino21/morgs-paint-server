@@ -68,6 +68,26 @@ router.get("/getGalleryHeader", (req, res) => {
     });
 });
 
+router.post("/sendWeddingData", (req, res) => {
+  const data = req.body
+  fetch(`${API}sendWeddingImg`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data)
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return res.json(data);
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+});
+
 router.post("/wedding", (req, res) => {
   db.WeddingPortrait.find({})
     .then(async (dbModel) => {
