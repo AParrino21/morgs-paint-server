@@ -97,7 +97,7 @@ router.post("/wedding", (req, res) => {
 
       try {
         const response = await fetch(
-          "https://morgspaintserver.herokuapp.com/api/paintings/create-checkout-session",
+          "https://morgs-paint-server-2-f7406efafa47.herokuapp.com/api/paintings/create-checkout-session",
           // "http://localhost:3001/api/paintings/create-checkout-session",
           {
             method: "POST",
